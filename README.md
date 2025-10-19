@@ -2,65 +2,131 @@
 
 **Live Demo:**  
 👉🏻 [Check out the working web app here!](https://moviesrecommendingsystem.streamlit.app/)
+  
+# Movies Recommender System
 
-Welcome to the Movies Recommending System project! This is my personal implementation of a machine learning-based recommendation engine that suggests movies to users based on similarity metrics and other powerful techniques.
-
-## Table of Contents
-
-- [Overview](#overview)
-- [Features](#features)
-- [Requirements](#requirements)
-- [Getting Started](#getting-started)
-- [Usage](#usage)
-- [Data](#data)
-- [Contributing](#contributing)
+A simple Streamlit app that recommends similar movies based on a selected title using precomputed similarity vectors. Posters are fetched from The Movie Database (TMDB) API.
 
 ## Overview
 
-This project is a Movie Recommendation System built primarily with Python and Jupyter Notebook. It leverages data processing and similarity algorithms to provide personalized movie recommendations. The repository includes all code, data files, and documentation needed to run and understand the system.
+- UI: Streamlit (`MRS/app.py`)
+- Data artifacts: precomputed pickles for the movie catalog and a similarity matrix
+- Poster images: fetched at runtime from TMDB
 
-## Features
+This repository contains:
 
-- Recommends movies based on various similarity metrics
-- Preprocessed datasets for efficient computation
-- Modular and extensible codebase
-- Ready-to-use Jupyter notebook for demonstration
+- `MRS/app.py` — the Streamlit application
+- `MRS.ipynb` — a notebook used to prepare data/artifacts (optional, for regeneration)
+- `artifacts/` — example artifact files you can rename/move for the app to run
+- `Data/` — original TMDB 5000 dataset CSVs (reference)
+
+## Prerequisites
+
+- Python 3.10+ (tested with 3.12.2)
+- pip
+- A TMDB API key (free to create at https://www.themoviedb.org/)
+
+## Quickstart (Windows PowerShell)
+
+1. Clone/open the repo and change directory to the project root.
+
+2. Create and activate a virtual environment:
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+```
+
+3. Install required packages:
+
+```powershell
+pip install streamlit pandas requests
+```
+
+4. Prepare artifacts expected by the app:
+
+- The app expects these files in the same folder as `MRS/app.py`:
+  - `movies_dict.pkl`
+  - `similarity.pkl`
+
+If you are starting from the provided `artifacts/` folder:
+
+- Copy/rename `artifacts/movie_list.pk` to `MRS/movies_dict.pkl`
+- Copy/rename `artifacts/similarity.pk` to `MRS/similarity.pkl`
+
+Example commands:
+
+```powershell
+# From the repo root
+Copy-Item .\artifacts\movie_list.pk .\MRS\movies_dict.pkl
+Copy-Item .\artifacts\similarity.pk .\MRS\similarity.pkl
+```
+
+5. Configure TMDB API access:
+
+- `MRS/app.py` currently contains a hard-coded API key in `fetch_poster(...)`.
+- For security, replace that with your own key. For a quick test, you can keep it as-is, but you may hit rate limits or an invalid key.
+
+Optional: If you prefer using an environment variable instead, update `MRS/app.py` to read from `os.environ["TMDB_API_KEY"]`, then set the variable in the current shell:
+
+```powershell
+$env:TMDB_API_KEY = "<your_tmdb_api_key>"
+```
+
+6. Run the app:
+
+```powershell
+cd MRS
+streamlit run app.py
+```
+
+Streamlit will print a local URL, typically http://localhost:8501. Open it in your browser, pick a movie, and click “Recommend”.
+
+## Repository structure
+
+```
+.
+├─ MRS.ipynb                # Data prep / artifact generation (optional)
+├─ Data/                    # Reference CSVs (TMDB 5000 dataset)
+├─ artifacts/               # Example precomputed artifacts to move/rename
+│  ├─ movie_list.pk
+│  └─ similarity.pk
+└─ MRS/
+   ├─ app.py                # Streamlit UI and inference
+   └─ (your .venv or myenv) # Local virtual environment (not required to be committed)
+```
+
+## Troubleshooting
+
+- ModuleNotFoundError: streamlit / pandas / requests
+
+  - Ensure your venv is activated and you installed dependencies: `pip install streamlit pandas requests`.
+
+- FileNotFoundError: movies_dict.pkl / similarity.pkl
+
+  - Confirm the two files exist next to `MRS/app.py` and have exactly those names.
+  - If starting from `artifacts/`, copy and rename as shown above.
+
+- Posters aren’t showing
+
+  - Check the API key in `MRS/app.py` or your `TMDB_API_KEY` if you refactored to env vars.
+  - TMDB may rate-limit or reject invalid keys.
+
+- Streamlit doesn’t open in browser
+  - Visit the printed URL manually (e.g., http://localhost:8501).
+  - Check that your firewall allows local connections to port 8501.
+  - You can change the port with: `streamlit run app.py --server.port 8502`.
+
+## Notes
+
+- The included `MRS.ipynb` can be used to (re)generate the `movies_dict.pkl` and `similarity.pkl` artifacts. Exact steps may vary depending on the approach you take.
+- Pickle files are Python-version dependent; keep runtime consistent between artifact generation and usage if possible.
 
 
-## Requirements
+## Acknowledgements
 
-- Python 3.x
-- Jupyter Notebook
-- (Common libraries: pandas, numpy, scikit-learn, etc.)
-
-## Getting Started
-
-1. **Clone this repository:**
-   ```bash
-   git clone 
-   cd Movies_Recommending_System
-   ```
-
-2. **Install dependencies:**
-
-3. **Run the notebook:**
-   Launch Jupyter Notebook and open `MRS.ipynb` to get started.
-
-## Usage
-
-- Open the `MRS.ipynb` notebook and run the cells in order.
-- The notebook contains all logic for loading data, preprocessing, and generating movie recommendations.
-- You can modify parameters or datasets as needed to experiment with the system.
-
-## Data
-
-- The `Data/` directory contains datasets used for training and recommendations.
-- Pickle files (`*.pkl`) store preprocessed data objects for faster execution.
-
-## Contributing
-
-Contributions, issues, and feature requests are welcome!  
-If you’d like to collaborate, feel free to open an issue or submit a pull request.
+- TMDB (The Movie Database) for posters and metadata (https://www.themoviedb.org/)
+- TMDB 5000 dataset for sample movie data
 
 
 ---
