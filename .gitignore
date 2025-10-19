@@ -1,0 +1,30 @@
+# Ignore Jupyter checkpoints
+.ipynb_checkpoints/
+
+# Ignore Python cache files
+__pycache__/
+
+
+# Ignore IDE and environment folders
+.idea/
+.vscode/
+venv/
+myenv/
+
+# Ignore pickle/model/data files (can be large)
+*.pkl
+*.pickle
+*.h5
+*.csv
+*.npz
+*.npy
+*.pk
+*.pkl
+
+# Ignore environment or system files
+.env
+.DS_Store
+
+# Ignore Windows-specific files
+Thumbs.db
+*.pkl
